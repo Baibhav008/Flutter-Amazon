@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class User
 {
   final String id;
@@ -6,6 +8,7 @@ class User
   final String password;
   final String address;
   final String type;
+  final String stamp;
 
   User({
     required this.id,
@@ -13,7 +16,8 @@ class User
     required this.email,
     required this.password,
     required this.address,
-    required this.type});
+    required this.type,
+  required this.stamp});
 
   Map<String,dynamic> fromAppToDB()
   {
@@ -23,7 +27,8 @@ class User
       'email' : email,
       'password' : password,
       'address' : address,
-      'type' : type
+      'type' : type,
+      'stamp' : stamp
     };
   }
 
@@ -35,7 +40,10 @@ class User
   email: map['email']??'',
   password: map['password']??'',
   address: map['address']??'',
-  type: map['type']??'');
+  type: map['type']??'',
+        stamp: map['stamp']??'');
   }
+
+  factory User.fromJson(String source) =>User.fromDBToApp(jsonDecode(source));
 
 }

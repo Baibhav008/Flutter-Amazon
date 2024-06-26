@@ -3,6 +3,7 @@ const authRouter = express.Router();
 const jwt = require('jsonwebtoken');
 const User = require('../model/user');
 const bcrypt = require('bcryptjs');
+const auth = require('../middleware/auth');
 
 
 //mongodb+srv://wildwolf:wildwolf008@cluster0.lmlxjr6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
@@ -77,5 +78,31 @@ authRouter.post("/api/signin",async (req,res)=>{
         res.status(500).json({error : e.message});
 
     }
-})
+});
+
+
+
+authRouter.post("/validateStamp",async(req,res)=>{
+    try{
+        const stamp = req.header('stamp');
+    if(!stamp) return res.json(false);
+    const isValid = jwt.verify(stamp,"secretKey");
+    if(!isValid) return res.json(false);
+    const user = await User.findById(isValid.id);
+    if(!user) return res.json(false);
+    return res.json(true);
+
+    }catch(e)
+    {
+        res.status(500).json({error:e.message});
+
+    }
+
+});
+
+authRouter.get("/",auth,async(req,res)=>{
+    const user = await User.findById(req.user);
+    res.json({...user._doc,stamp:req.stamp});
+});
+
 module.exports = authRouter;

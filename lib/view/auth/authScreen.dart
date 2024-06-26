@@ -218,7 +218,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 child: Text("Conditions of user Privacy Notice"))
                           ],
                         ),
-                    )
+                    )// LOGIN FORM
                     : Form(
                         key: signUpKey,
                         child: Container(
@@ -431,7 +431,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             ],
                           ),
                         ),
-                      )),
+                      )),// SIGNUP FORM
           ),
         ),
       ),

@@ -1,15 +1,38 @@
 import 'package:amazon_clone/constant/global.dart';
+import 'package:amazon_clone/controller/authController.dart';
+import 'package:amazon_clone/controller/providerController/userProvider.dart';
 import 'package:amazon_clone/router.dart';
+import 'package:amazon_clone/utils/BottomNavBar.dart';
+import 'package:amazon_clone/view/HomeScreen.dart';
 import 'package:amazon_clone/view/auth/authScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+  providers: [
+    ChangeNotifierProvider(create: (context)=>UserProvider())
+  ],
+      child: const MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  final AuthController authController = AuthController();
+  @override
+  void initState() {
+    authController.fetchUserData(context);
+    print("Error checking ");
+    //print(Provider.of<UserProvider>(context).user.stamp);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,32 +50,10 @@ class MyApp extends StatelessWidget {
 
         ),
 
-        home:Scaffold(
-        appBar: AppBar(
-
-          elevation: 10.00,
-          title: Text("Amazon",style: TextStyle(color: Colors.white,fontSize: 28,fontWeight: FontWeight.bold),),
-          centerTitle: true,
-          backgroundColor: Colors.lightBlueAccent,
-        ),
-          body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text( 'Flutter Demo Home Page'),
-              Builder(
-                builder: (context) {
-                  return ElevatedButton(onPressed: (){
-                    Navigator.pushNamed(context, AuthScreen.routeName);
-                  }, child: Text("Click Me"));
-                }
-              )
-            ],
-          )))
+        home:Provider.of<UserProvider>(context).user.stamp.isNotEmpty?BottomNavBar():AuthScreen()
     );
 
 
   }
-
 }
 

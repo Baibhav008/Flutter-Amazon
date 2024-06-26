@@ -24,9 +24,11 @@ app.use("/dash",dash);
 app.use(express.json());
 app.use("/auth",authRouter);
 
+/*
 app.get("/",(req,res)=>{
     res.send("Home Page");
 })
+    */
 
 
 app.get("/nodemon",(req,res)=>{
